@@ -23,7 +23,10 @@ end
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  fail "Unimplemented"
+  	steps %Q{I should see #{e1} before #{e2}}
+	  #Stack Overflow states below is the exp for e1 to appear before e2
+	  regexp = /#{e1}.*#{e2}/m
+	  expect(page.body).to match(regexp)
 end
 
 # Make it easier to express checking or unchecking several boxes at once
@@ -39,7 +42,16 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
     end
 end
 
-Then /I should see all the movies/ do
+Then /I should( not)? see the following movies: (.*)/ do |notsee, movies|
+	movies.split.each do |movie|
+		steps %Q{I should #{notsee}see #{movie}}
+  end
+end
+
+
+Then /I should see all the movies/ do 
   # Make sure that all the movies in the app are visible in the table
-  fail "Unimplemented"
+  Movie.all.each do |movie|
+    expect(page.body).to include(movie)
+  end
 end

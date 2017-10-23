@@ -31,6 +31,9 @@ module NavigationHelpers
       
     when /^the Similar Movies page for "(.*)"$/
       movies_director_path(Movie.where("title = ?", $1).first)
+      
+    when /^the Create New Movie page$/
+      new_movie_path()
 
     else
       begin
